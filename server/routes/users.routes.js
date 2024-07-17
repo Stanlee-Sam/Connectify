@@ -1,11 +1,15 @@
 import { Router } from "express";
-import {getUser,getUserFriends, addRemoveFriend} from '../controllers/users.controller.js'
+import {
+  getUser,
+  getUserFriends,
+  addRemoveFriend,
+} from "../controllers/users.controller.js";
 import { verifyToken } from "../middleware/auth.middleware.js";
 const router = Router();
 
-// Get all users
-router.get('/:id', verifyToken, getUser)
-router.get('/:id/friends',  verifyToken, getUserFriends)
-router.get('/:id/users', verifyToken, getUser)
+router.get("/:id", verifyToken, getUser);
+router.get("/:id/friends", verifyToken, getUserFriends);
 
-export default router
+router.patch("/:id/:friendId", verifyToken, addRemoveFriend);
+
+export default router;
