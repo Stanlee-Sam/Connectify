@@ -7,9 +7,13 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import multer from "multer";
+import { signup } from "./controllers/auth.controller.js";
+import { createPost } from "./controllers/posts.controller.js"
 import authRoute from "./routes/auth.routes.js";
 import usersRoute from "./routes/users.routes.js";
-import { signup } from "./controllers/auth.controller.js";
+import postRoute from "./routes/posts.routes.js"
+import { verifyToken } from "./middleware/auth.middleware.js";
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -37,11 +41,15 @@ const upload = multer({ storage });
 
 // Signup 
 app.post("/api/auth/signup", upload.single("picture"), signup);
+//post route
+app.post('/api/posts', verifyToken, upload.single("picture"), createPost)
 
 // Login 
 app.use("/api/auth", authRoute);
 //users
 app.use("/api/users", usersRoute);
+//posts
+app.use("/api/posts", postRoute)
 
 app.get("/test", (req, res) => {
     res.status(200).send("Hey");

@@ -13,34 +13,51 @@ generator client {
 }
 
 model User {
-  id             String      @id @default(uuid())
-  firstName      String
-  lastName       String
-  email          String      @unique
-  password       String
-  picturePath    String?
-  location       String?
-  occupation     String?
-  viewedProfile  Int         @default(0)
-  impressions    Int         @default(0)
-  friends        User[]      @relation("UserFriends")
-  friendsOf      User[]      @relation("UserFriends")  
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  id            String      @id @default(uuid())
+  firstName     String
+  lastName      String
+  email         String      @unique
+  password      String
+  picturePath   String?
+  location      String?
+  occupation    String?
+  viewedProfile Int         @default(0)
+  impressions   Int         @default(0)
+  friends       User[]      @relation("UserFriends")
+  friendsOf     User[]      @relation("UserFriends")
+  posts         Post[]      @relation("PostAuthor")
+  comments      Comment[]   @relation("CommentAuthor")
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  postId    String
+  authorId  String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    User     @relation("CommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
-// model Post {
-//   id        Int      @id @default(autoincrement())
-//   title     String
-//   content   String
-//   published Boolean  @default(false)
-//   authorId  Int
-//   author    User     @relation(fields: [authorId], references: [id])
-//   comments  Comment[]
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
+model Post {
+  id              String     @id @default(uuid())
+  userId          String
+  firstName       String
+  lastName        String
+  location        String
+  description     String
+  userPicturePath String
+  picturePath     String
+  likes           Json       @default("{}")
+  authorId        String
+  author          User       @relation("PostAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  comments        Comment[]
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
 
 // model Profile {
 //   id        Int    @id @default(autoincrement())
