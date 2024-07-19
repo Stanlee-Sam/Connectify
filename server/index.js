@@ -11,8 +11,12 @@ import { signup } from "./controllers/auth.controller.js";
 import { createPost } from "./controllers/posts.controller.js"
 import authRoute from "./routes/auth.routes.js";
 import usersRoute from "./routes/users.routes.js";
-import postRoute from "./routes/posts.routes.js"
+import postRoute from "./routes/posts.routes.js";
+import likeRoute from "./routes/likes.routes.js";
+import commentRoute from "./routes/comments.routes.js"
 import { verifyToken } from "./middleware/auth.middleware.js";
+
+import cookieParser from "cookie-parser";
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -21,6 +25,7 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser())
 app.use(helmet());
 app.use(morgan("common"));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
@@ -50,6 +55,10 @@ app.use("/api/auth", authRoute);
 app.use("/api/users", usersRoute);
 //posts
 app.use("/api/posts", postRoute)
+//like posts
+app.use("/api/like", likeRoute);
+//add.comments
+app.use("/api/comments", commentRoute);
 
 app.get("/test", (req, res) => {
     res.status(200).send("Hey");

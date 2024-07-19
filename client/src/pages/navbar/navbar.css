@@ -1,0 +1,65 @@
+.navbar-section {
+    padding: 1rem 6%;
+    background-color: var(--alt-background-color);
+    display: flex;
+    justify-content: space-between;
+}
+
+.navbar-title {
+    font-weight: bold;
+    font-size: clamp(1rem, 2rem, 2.25rem);
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+.navbar-title:hover {
+    color: var(--primary-light-color);
+}
+
+.search-container {
+    background-color: var(--neutral-light-color);
+    border-radius: 9px;
+    padding: 0.1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+}
+
+.desktop-nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.mobile-nav-toggle {
+    display: flex;
+    align-items: center;
+}
+
+.mobile-menu {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    z-index: 10;
+    max-width: 500px;
+    min-width: 300px;
+    background-color: var(--background-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+}
+
+.select-control {
+    background-color: var(--neutral-light-color);
+    width: 150px;
+    border-radius: 0.25rem;
+    padding: 0.25rem 1rem;
+}
+
+.select-control .MuiSvgIcon-root {
+    margin-right: 0.25rem;
+    width: 3rem;
+}
