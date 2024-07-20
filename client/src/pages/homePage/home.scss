@@ -1,0 +1,11 @@
+@import '../../style.scss';
+
+@include themify($themes) {
+
+    .homepage-section{
+        background-color: themed(bgSoft);
+    padding: 20px 70px;
+    }
+
+    
+}

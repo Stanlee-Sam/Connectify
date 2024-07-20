@@ -1,29 +1,101 @@
-import  { useMemo } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+// import  { useMemo } from 'react';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Outlet,
+  Navigate,
+} from "react-router-dom";
+// import { useSelector } from 'react-redux';
+// import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 
-import HomePage from './pages/homePage/home';
-import ProfilePage from './pages/profilePage/profile';
-import LoginPage from './pages/loginPage/login'; 
-import { themeSettings } from './theme';
-
-
+import HomePage from "./pages/homePage/home";
+import ProfilePage from "./pages/profilePage/profile";
+import LoginPage from "./pages/loginPage/login";
+import Register from "./pages/signup/signup";
+// import { themeSettings } from './theme';
+// import { Login } from '@mui/icons-material';
+// import Navbar from './pages/navbar/navbar';
+import Navbar from "./components/navbar/Navbar";
+import LeftBar from "./components/leftbar/LeftBar";
+import RightBar from "./components/rightbar/RightBar";
+import './style.scss'
+import { useContext } from "react";
+import { DarkModeContext } from "./context/darkModeContext.jsx";
+import { AuthContext } from "./context/authContext.jsx";
 const App = () => {
-  const mode = useSelector((state) => state.mode);
-  const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
+
+  const {currentUser} = useContext(AuthContext);
+  const {darkMode} = useContext(DarkModeContext)
+  console.log(darkMode)
+  console.log(currentUser)
+
+  const Layout = () => {
+    return (
+     
+      <div className={darkMode ? "theme-dark" : "theme-light"}>
+        <Navbar />
+        <div style={{ display: "flex" }}>
+          <LeftBar />
+          <div style={{flex: 6}}>
+          <Outlet />
+          </div>
+          <RightBar />
+        </div>
+      </div>
+    );
+  };
+
+  // eslint-disable-next-line react/prop-types
+  const ProtectedRoute = ({ children }) => {
+    if (!currentUser) {
+      return <Navigate from="/login" />;
+    }
+    return children;
+  };
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <ProtectedRoute>
+         <Layout />
+      </ProtectedRoute>,
+      children: [
+        {
+          path: "/",
+          element: <HomePage />,
+        },
+        {
+          path: "/profile/:id",
+          element: <ProfilePage />,
+        },
+      ],
+    },
+    {
+      path: "/login",
+      element: <LoginPage />,
+    },
+    {
+      path: "/register",
+      element: <Register />,
+    },
+  ]);
   return (
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Routes>
-          <Route exact path="/" element={<LoginPage />} />
-          <Route exact path="/home" element={<HomePage />} />
-          <Route exact path="/profile" element={<ProfilePage />} />
-        </Routes>
-      </ThemeProvider>
-    </BrowserRouter>
+    // <BrowserRouter>
+    //   <ThemeProvider theme={theme}>
+    //     <CssBaseline />
+    //     <Routes>
+    //       <Route exact path="/" element={<LoginPage />} />
+    //       <Route exact path="/signup" element={<Register />} />
+
+    //       <Route exact path="/home" element={<HomePage />} />
+    //       <Route exact path="/profile" element={<ProfilePage />} />
+    //     </Routes>
+    //   </ThemeProvider>
+    // </BrowserRouter>
+
+    <div>
+      <RouterProvider router={router} />
+    </div>
   );
-}
+};
 
 export default App;
