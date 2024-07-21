@@ -2,57 +2,27 @@ import { Prisma, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient()
 
-// export const createPost = async (req, res) => {
-//     try {
-//         const { userId, description, picturePath } = req.body;
-//         const user = await prisma.user.findUnique({ where: { id: userId } });
-
-//         if (!user) return res.status(404).json({ message: "User not found" });
-
-//         const newPost = await prisma.post.create({
-//             data: {
-//                 userId,
-//                 firstName: user.firstName,
-//                 lastName: user.lastName,
-//                 location: user.location,
-//                 description,
-//                 userPicturePath: user.picturePath,
-//                 picturePath,
-//                 likes: {},
-//                 comments: []
-//             }
-//         });
-
-//         const post = await prisma.post.findMany(); 
-//         res.status(201).json(post);
-//     } catch (e) {
-//         console.error(e);
-//         res.status(500).json({ message: "Server Error" });
-//     }
-// };
 
 export const createPost = async (req, res) => {
     try {
-      const { userId, description, img, name, profilePic } = req.body;
+      const { userId, desc, img, name, profilePic } = req.body;
   
-      // Check if user exists
-      const user = await prisma.user.findUnique({ where: { id: userId } });
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
+    
+      if (!userId || !desc || !name) {
+        return res.status(400).json({ message: "Missing required fields" });
       }
   
-      // Create a new post
+      
       const newPost = await prisma.post.create({
         data: {
           userId,
-          name: name || `${user.firstName} ${user.lastName}`, // Default to user's full name if name is not provided
-          desc: description,
+          desc,
           img,
-          profilePic: profilePic || user.picturePath, // Default to user's picture if profilePic is not provided
+          name,
+          profilePic
         },
       });
   
-      // Respond with the newly created post
       res.status(201).json(newPost);
     } catch (e) {
       console.error(e);
@@ -61,15 +31,58 @@ export const createPost = async (req, res) => {
   };
   
 
-export const getFeedPosts = async (req, res) => {
+  export const getFeedPosts = async (req, res) => {
     try {
-        const posts = await prisma.post.findMany();
-        res.status(200).json(posts);
+      const userId = req.user.id;
+
+      console.log("User ID:", userId);
+  
+      
+      const followingRelationships = await prisma.relationship.findMany({
+        where: { followerUserId: userId },
+        select: { followedUserId: true }
+      });
+
+      console.log("Following Relationships:", followingRelationships);
+  
+      const followingIds = followingRelationships.map(rel => rel.followedUserId);
+      console.log("Following IDs:", followingIds); 
+  
+      // Fetch posts from both the logged-in user and users they follow
+      const posts = await prisma.post.findMany({
+        where: {
+          OR: [
+            { userId: userId }, 
+            { userId: { in: followingIds } } 
+          ]
+        },
+        include: { user: true }, 
+        orderBy: {
+          createdAt: 'desc' 
+        }
+      });
+  
+      console.log("Posts:", posts); 
+      res.status(200).json(posts);
     } catch (e) {
-        console.error(e);
-        res.status(500).json({ message: e.message });
+      console.error(e);
+      res.status(500).json({ message: e.message });
     }
-};
+  };
+  
+  
+
+//Get all posts even for non-followers
+//   export const getFeedPosts = async (req, res) => {
+//     try {
+//         const posts = await prisma.post.findMany();
+//         res.status(200).json(posts);
+//     } catch (e) {
+//         console.error(e);
+//         res.status(500).json({ message: e.message });
+//     }
+// };
+  
 
 export const getUserPosts = async (req, res) => {
     try {

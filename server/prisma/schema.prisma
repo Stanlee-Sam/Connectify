@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -12,20 +7,18 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
-
 model User {
-  id          Int      @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   firstName   String
   lastName    String
-  username    String   @unique
-  email       String   @unique
+  username    String        @unique
+  email       String        @unique
   password    String
-  name        String  // Optional if you want to retain `name` field
-  coverPic    String?  @db.VarChar(100)
-  profilePic  String?  @db.VarChar(100)
-  city        String?  @db.VarChar(45)
-  website     String?  @db.VarChar(45)
+  name        String?
+  coverPic    String?       @db.VarChar(100)
+  profilePic  String?       @db.VarChar(100)
+  city        String?       @db.VarChar(45)
+  website     String?       @db.VarChar(45)
   posts       Post[]
   comments    Comment[]
   stories     Story[]
@@ -34,52 +27,50 @@ model User {
   likes       Like[]
 }
 
-
 model Post {
-  id          Int      @id @default(autoincrement())
-  desc        String?  @db.VarChar(200)
-  img         String?  @db.VarChar(200)
-  name        String   @db.VarChar(45)
-  createdAt   DateTime @default(now())
-  profilePic  String?  @db.VarChar(100)
+  id          Int           @id @default(autoincrement())
+  desc        String?       @db.VarChar(200)
+  img         String?       @db.VarChar(200)
+  name        String        @db.VarChar(45)
+  createdAt   DateTime      @default(now())
+  profilePic  String?       @db.VarChar(100)
   userId      Int
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   comments    Comment[]
   likes       Like[]
 }
 
-
 model Comment {
-  id          Int      @id @default(autoincrement())
-  desc        String   @db.VarChar(200)
-  createdAt   DateTime? @db.Timestamp(6)
+  id          Int           @id @default(autoincrement())
+  desc        String        @db.VarChar(200)
+  createdAt   DateTime?     @db.Timestamp(6)
   userId      Int
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   postId      Int
-  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  post        Post          @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Story {
-  id          Int      @id @default(autoincrement())
-  img         String   @db.VarChar(200)
+  id          Int           @id @default(autoincrement())
+  img         String        @db.VarChar(200)
   userId      Int
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Relationship {
-  id               Int      @id @default(autoincrement())
+  id               Int           @id @default(autoincrement())
   followerUserId   Int
   followedUserId   Int
-  followerUser     User     @relation("Follower", fields: [followerUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  followedUser     User     @relation("Following", fields: [followedUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  followerUser     User          @relation("Follower", fields: [followerUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  followedUser     User          @relation("Following", fields: [followedUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   @@unique([followerUserId, followedUserId])
 }
 
 model Like {
-  id          Int      @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   userId      Int
   postId      Int
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  post        Post          @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   @@unique([userId, postId])
 }
