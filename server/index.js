@@ -24,13 +24,25 @@ const __dirname = path.dirname(__filename);
 dotenv.config();
 const app = express();
 
+app.use(cors({
+    origin: ["http://localhost:5173", "http://localhost:5174","http://localhost:5175"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+}));
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Credentials", true);
+    next();
+});
+
+
 app.use(express.json());
 app.use(cookieParser())
 app.use(helmet());
 app.use(morgan("common"));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
-app.use(cors());
+
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 // Multer 
@@ -45,9 +57,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Signup 
-app.post("/api/auth/signup", upload.single("picture"), signup);
+app.post("/api/auth/signup",  signup);
 //post route
-app.post('/api/posts', verifyToken, upload.single("picture"), createPost)
+app.post('/api/posts', verifyToken,  createPost)
 
 // Login 
 app.use("/api/auth", authRoute);
@@ -62,6 +74,11 @@ app.use("/api/comments", commentRoute);
 
 app.get("/test", (req, res) => {
     res.status(200).send("Hey");
+});
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
 });
 
 const PORT = process.env.PORT || 8000;

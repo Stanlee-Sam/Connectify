@@ -1,24 +1,23 @@
 import './posts.css';
 import Post from '../../components/post/Post.jsx';
+import {
+  useQuery
+} from '@tanstack/react-query'
+import { makeRequest } from '../../axios';
 
 const Posts = () => {
-  const posts = [
-    {
-      id: 1,
-      userId: 1,
-      profilePic: "/src/assets/WhatsApp Image 2023-02-24 at 22.49.24.jpg", 
-      desc: "This is the first post content",
-      name: "John Doe",
-      img: "/src/assets/WhatsApp Image 2023-02-24 at 22.49.24.jpg" 
-    },
-    {
-      id: 2,
-      userId: 2,
-      profilePic: "/src/assets/WhatsApp Image 2023-02-24 at 22.49.24.jpg", // Update path if necessary
-      desc: "This is the second post content",
-      name: "Jane Smith"
-    }
-  ];
+  const { isLoading, error, data: posts } = useQuery({
+    queryKey: ['posts'],
+    queryFn: () =>
+      makeRequest.get("/posts").then((res) => res.data),
+    onError: (err) => console.error('Fetch error:', err),
+  });
+  
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading posts: {error.message}</div>;
+
+  if (posts.length === 0) return <div>No posts available</div>;
 
   return (
     <section className="posts-section">

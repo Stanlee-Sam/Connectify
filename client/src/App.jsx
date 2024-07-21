@@ -22,6 +22,12 @@ import './style.scss'
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext.jsx";
 import { AuthContext } from "./context/authContext.jsx";
+
+import {
+  QueryClient,
+  QueryClientProvider,
+  
+} from '@tanstack/react-query'
 const App = () => {
 
   const {currentUser} = useContext(AuthContext);
@@ -29,9 +35,11 @@ const App = () => {
   console.log(darkMode)
   console.log(currentUser)
 
+  const queryClient = new QueryClient()
+
   const Layout = () => {
     return (
-     
+      <QueryClientProvider client={queryClient}>
       <div className={darkMode ? "theme-dark" : "theme-light"}>
         <Navbar />
         <div style={{ display: "flex" }}>
@@ -42,13 +50,16 @@ const App = () => {
           <RightBar />
         </div>
       </div>
+
+     </QueryClientProvider>
+      
     );
   };
 
   // eslint-disable-next-line react/prop-types
   const ProtectedRoute = ({ children }) => {
     if (!currentUser) {
-      return <Navigate from="/login" />;
+      return <Navigate to="/login" />;
     }
     return children;
   };
