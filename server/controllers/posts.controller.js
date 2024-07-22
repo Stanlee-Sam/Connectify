@@ -4,31 +4,32 @@ const prisma = new PrismaClient()
 
 
 export const createPost = async (req, res) => {
-    try {
-      const { userId, desc, img, name, profilePic } = req.body;
-  
-    
-      if (!userId || !desc || !name) {
-        return res.status(400).json({ message: "Missing required fields" });
-      }
-  
-      
-      const newPost = await prisma.post.create({
-        data: {
-          userId,
-          desc,
-          img,
-          name,
-          profilePic
-        },
-      });
-  
-      res.status(201).json(newPost);
-    } catch (e) {
-      console.error(e);
-      res.status(500).json({ message: "Server Error" });
+  try {
+    const { userId, desc, img, name, profilePic } = req.body;
+
+    // Check for required fields
+    if (!userId || !desc || !name) {
+      return res.status(400).json({ message: "Missing required fields" });
     }
-  };
+
+    // Create new post
+    const newPost = await prisma.post.create({
+      data: {
+        userId,
+        desc,
+        img: img || '', // Default to empty string if undefined
+        name,
+        profilePic: profilePic || '' // Default to empty string if undefined
+      },
+    });
+
+    res.status(201).json(newPost);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
   
 
   export const getFeedPosts = async (req, res) => {
@@ -48,7 +49,7 @@ export const createPost = async (req, res) => {
       const followingIds = followingRelationships.map(rel => rel.followedUserId);
       console.log("Following IDs:", followingIds); 
   
-      // Fetch posts from both the logged-in user and users they follow
+      
       const posts = await prisma.post.findMany({
         where: {
           OR: [
