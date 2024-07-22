@@ -36,4 +36,42 @@ export const getComment = async (req, res) => {
     console.error('Error fetching comments:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-};
+}
+
+
+
+export const addComment = async (req, res) => {
+    try {
+
+        console.log("Incoming request body:", req.body); 
+      const { userId, desc, postId } = req.body;
+  
+      if (!userId || !desc || !postId) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+  
+      const userExists = await prisma.user.findUnique({ where: { id: userId } });
+      const postExists = await prisma.post.findUnique({ where: { id: postId } });
+  
+      if (!userExists) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      if (!postExists) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+  
+      const newComment = await prisma.comment.create({
+        data: {
+          userId,
+          desc,
+          postId,
+          createdAt: new Date()
+        },
+      });
+  
+      res.status(201).json(newComment);
+    } catch (e) {
+      console.error("Error adding comment:", e);
+      res.status(500).json({ message: "Server Error" });
+    }
+  };

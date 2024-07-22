@@ -40,13 +40,13 @@ const Share = () => {
     e.preventDefault();
     setIsSubmitting(true);
   
-    // Construct postData with currentUser data
+    
     const postData = {
-      userId: currentUser?.id, // Use 'id' from currentUser
+      userId: currentUser?.id, 
       desc,
       img: imgUrl,
-      name: currentUser?.name || '', // Provide default if missing
-      profilePic: currentUser?.profilePic || '' // Provide default if missing
+      name: currentUser?.name || '', 
+      profilePic: currentUser?.profilePic || '' 
     };
   
     console.log("Posting data:", postData);
