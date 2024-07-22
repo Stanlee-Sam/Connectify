@@ -52,7 +52,7 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 // Multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    // cb(null, "../client/public/assets");
+    
     cb(null, path.join(__dirname, "../client/public/assets"));
   },
   filename: function (req, file, cb) {

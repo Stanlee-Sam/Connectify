@@ -1,10 +1,10 @@
 import { Router } from "express";
 
-import { addComment } from "../controllers/comments.controller.js";
+import { getComment } from "../controllers/comments.controller.js";
 
 const router = Router();
 
 
 
-router.post('/',  addComment )
+router.get('/:postId',  getComment )
 export default router;

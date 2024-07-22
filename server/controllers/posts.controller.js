@@ -7,19 +7,19 @@ export const createPost = async (req, res) => {
   try {
     const { userId, desc, img, name, profilePic } = req.body;
 
-    // Check for required fields
+   
     if (!userId || !desc || !name) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    // Create new post
+    
     const newPost = await prisma.post.create({
       data: {
         userId,
         desc,
-        img: img || '', // Default to empty string if undefined
+        img: img || '', 
         name,
-        profilePic: profilePic || '' // Default to empty string if undefined
+        profilePic: profilePic || '' 
       },
     });
 
@@ -71,18 +71,6 @@ export const createPost = async (req, res) => {
     }
   };
   
-  
-
-//Get all posts even for non-followers
-//   export const getFeedPosts = async (req, res) => {
-//     try {
-//         const posts = await prisma.post.findMany();
-//         res.status(200).json(posts);
-//     } catch (e) {
-//         console.error(e);
-//         res.status(500).json({ message: e.message });
-//     }
-// };
   
 
 export const getUserPosts = async (req, res) => {
