@@ -1,30 +1,81 @@
-import { FacebookTwoTone } from "@mui/icons-material";
-import { LinkedIn } from "@mui/icons-material";
-import { Instagram } from "@mui/icons-material";
-import { Pinterest } from "@mui/icons-material";
-import { X } from "@mui/icons-material";
-import { Place } from "@mui/icons-material";
-import { Language } from "@mui/icons-material";
-import { EmailOutlined } from "@mui/icons-material";
-import { MoreVert } from "@mui/icons-material";
-
+import  { useState, useEffect, useContext } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useLocation } from 'react-router-dom';
+import { AuthContext } from '../../context/authContext';
+import { makeRequest } from '../../axios';
 import "./profile.scss";
-import Posts from "../../components/posts/posts";
+import Posts from '../../components/posts/posts';
+import { FacebookTwoTone, LinkedIn, Instagram, Pinterest, X, Place, Language, EmailOutlined, MoreVert } from '@mui/icons-material';
 
 const ProfilePage = () => {
+  const { currentUser } = useContext(AuthContext);
+  const queryClient = useQueryClient();
+  const userId = parseInt(useLocation().pathname.split('/')[2], 10);
+  
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  const { isLoading, error, data } = useQuery({
+    queryKey: ['user', userId],
+    queryFn: async () => {
+      const response = await makeRequest.get(`/users/find/${userId}`);
+      return response.data;
+    },
+    onError: (err) => console.error('Fetch error:', err),
+  });
+
+  const { isLoading: rIsLoading, data: relationshipData } = useQuery({
+    queryKey: ['relationship', userId],
+    queryFn: async () => {
+      const response = await makeRequest.get(`/relationships/${userId}`);
+      return response.data;
+    },
+    onError: (err) => console.error('Fetch error:', err),
+  });
+
+  useEffect(() => {
+    if (relationshipData) {
+      setIsFollowing(relationshipData.includes(currentUser.id));
+    }
+  }, [relationshipData, currentUser.id]);
+
+  const handleFollow = async () => {
+    if (!currentUser?.id || !userId) {
+      console.error('User or target user ID is undefined');
+      return;
+    }
+
+    try {
+      if (isFollowing) {
+        await makeRequest.delete('/relationships', {
+          data: { followerUserId: currentUser.id, followedUserId: userId },
+        });
+        setIsFollowing(false);
+      } else {
+        await makeRequest.post('/relationships', {
+          followerUserId: currentUser.id,
+          followedUserId: userId,
+        });
+        setIsFollowing(true);
+      }
+      queryClient.invalidateQueries(['relationship', userId]);
+    } catch (err) {
+      console.error('Error updating relationship:', err.response?.data || err.message);
+    }
+  };
+
+  if (isLoading || rIsLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error || !data) {
+    return <div>Error loading profile</div>;
+  }
+
   return (
     <section className="profile-section">
       <div className="images">
-        <img
-          className="cover"
-          src="/src/assets/WhatsApp Image 2023-02-24 at 22.49.29.jpg"
-          alt=""
-        />
-        <img
-          className="profile-image"
-          src="/src/assets/20210828_234819.jpg"
-          alt=""
-        />
+        <img className="cover" src={data.coverPic} alt="" />
+        <img className="profile-image" src={data.profilePic} alt="" />
       </div>
       <div className="profile-container">
         <div className="uInfo">
@@ -46,19 +97,24 @@ const ProfilePage = () => {
             </a>
           </div>
           <div className="center">
-            <span>Jay Gerrick</span>
+            <span>{data.name}</span>
             <div className="info">
               <div className="item">
                 <Place />
-                <span>Kenya</span>
+                <span>{data.city}</span>
               </div>
               <div className="item">
                 <Language />
-                <span>sam.com</span>
+                <span>{data.website}</span>
               </div>
-             
             </div>
-            <button>Follow</button>
+            {userId === currentUser.id ? (
+              <button>Update</button>
+            ) : (
+              <button onClick={handleFollow}>
+                {isFollowing ? 'Following' : 'Follow'}
+              </button>
+            )}
           </div>
           <div className="right">
             <EmailOutlined />
@@ -66,7 +122,8 @@ const ProfilePage = () => {
           </div>
         </div>
       </div>
-      <Posts/>
+      {/* Pass the userId to fetch posts specific to this user */}
+      <Posts userId={userId} />
     </section>
   );
 };

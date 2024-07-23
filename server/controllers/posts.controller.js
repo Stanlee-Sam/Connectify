@@ -73,16 +73,16 @@ export const createPost = async (req, res) => {
   
   
 
-export const getUserPosts = async (req, res) => {
+  export const getUserPosts = async (req, res) => {
     try {
-        const { userId } = req.params;
-        const posts = await prisma.post.findMany({ where: { userId } });
-        res.status(200).json(posts);
+      const { userId } = req.params;
+      const posts = await prisma.post.findMany({ where: { userId: parseInt(userId, 10) } });
+      res.status(200).json(posts);
     } catch (e) {
-        console.error(e);
-        res.status(500).json({ message: e.message });
+      console.error(e);
+      res.status(500).json({ message: e.message });
     }
-};
+  };
 // export const likePost = async(req,res) => {
 //     try{
 //         const { id} = req.params

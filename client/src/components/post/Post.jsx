@@ -1,13 +1,13 @@
 import './Post.scss'
 import { Link } from 'react-router-dom'
 import { FavoriteBorderOutlined, MoreHoriz } from '@mui/icons-material'
-import { FavoriteBorder } from '@mui/icons-material'
 import { FavoriteOutlined } from '@mui/icons-material'
 import { Textsms } from '@mui/icons-material'
 import { ShareOutlined } from '@mui/icons-material'
 import Comments from '../../components/comments/Comments'
 import { useState } from 'react'
 import moment from 'moment'
+import PropTypes from 'prop-types';
 
 const Post = ({post}) => {
     const [commentOpen, setCommentOpen] = useState(false);
@@ -36,7 +36,7 @@ const Post = ({post}) => {
                 </div>
                 <div className="content">
                     <p>{post.desc}</p>
-                    {/* Log the image URL before rendering */}
+                    
                     {post.img && <img src={`/assets/${post.img}`} alt="Post" />}
                 </div>
                 <div className="info">
@@ -58,5 +58,15 @@ const Post = ({post}) => {
         </section>
     )
 }
-
+Post.propTypes = {
+    post: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      userId: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      profilePic: PropTypes.string.isRequired,
+      desc: PropTypes.string.isRequired,
+      img: PropTypes.string,
+      createdAt: PropTypes.instanceOf(Date).isRequired,
+    }).isRequired,
+  };
 export default Post

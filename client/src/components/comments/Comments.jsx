@@ -7,7 +7,7 @@ import { makeRequest } from "../../axios";
 import moment from "moment";
 
 const Comments = ({ postId }) => {
-  const { currentUser } = useContext(AuthContext); // Ensure currentUser is used from context
+  const { currentUser } = useContext(AuthContext); 
   const [newComment, setNewComment] = useState("");
 
   const queryClient = useQueryClient();

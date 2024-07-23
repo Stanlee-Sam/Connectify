@@ -14,6 +14,7 @@ import usersRoute from "./routes/users.routes.js";
 import postRoute from "./routes/posts.routes.js";
 import likeRoute from "./routes/likes.routes.js";
 import commentRoute from "./routes/comments.routes.js";
+import  relationshipRoute from "./routes/relationships.routes.js";
 import { verifyToken } from "./middleware/auth.middleware.js";
 
 import cookieParser from "cookie-parser";
@@ -79,8 +80,10 @@ app.use("/api/users", usersRoute);
 app.use("/api/posts", postRoute);
 //like posts
 app.use("/api/like", likeRoute);
-//add.comments
+//comments
 app.use("/api/comments", commentRoute);
+//relationships 
+app.use("/api/relationships", relationshipRoute);
 
 app.get("/test", (req, res) => {
   res.status(200).send("Hey");

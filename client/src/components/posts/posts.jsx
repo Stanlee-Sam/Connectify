@@ -4,12 +4,12 @@ import {
   useQuery
 } from '@tanstack/react-query'
 import { makeRequest } from '../../axios';
-
-const Posts = () => {
+import PropTypes from 'prop-types';
+const Posts = ({userId}) => {
   const { isLoading, error, data: posts } = useQuery({
     queryKey: ['posts'],
     queryFn: () =>
-      makeRequest.get("/posts").then((res) => res.data),
+      makeRequest.get(`/posts?userId=${userId}`).then((res) => res.data),
     onError: (err) => console.error('Fetch error:', err),
   });
   
@@ -26,6 +26,11 @@ const Posts = () => {
       ))}
     </section>
   );
+  
 };
+Posts.propTypes = {
+  userId: PropTypes.number.isRequired,
+    
+}
 
 export default Posts;
