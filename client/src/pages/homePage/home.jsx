@@ -1,7 +1,5 @@
 // import { Box } from "@mui/material";
-// import Navbar from "../navbar/navbar";
-// import Register from "../../pages/signup/signup";
-// import LoginPage from "../../pages/loginPage/login";
+
 import Share from '../../components/Share/Share';
 import Stories from '../../components/stories/stories';
 import './home.scss'
@@ -14,11 +12,7 @@ const HomePage = () => {
             <Share/>
             <Posts/>
         </section>
-        // <Box>
-        //     {/* <Navbar/> */}
-        //     <Register/>
-        //     <LoginPage/>
-        // </Box>
+       
     );
 }
  

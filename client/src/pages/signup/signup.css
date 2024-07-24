@@ -1,0 +1,101 @@
+.signup-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f2f5; 
+    color: #333; 
+}
+
+.register-card {
+    display: flex;
+    width: 800px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff; 
+}
+
+.signup-section-left, .signup-section-right {
+    flex: 1;
+    padding: 20px;
+}
+
+.signup-section-left {
+    background-color: #f7f9fa; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.signup-section-left h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.signup-section-left p {
+    margin-bottom: 20px;
+    color: #666; 
+}
+
+.signup-section-left span {
+    display: block;
+    margin-top: 20px;
+}
+
+.signup-section-left button {
+    background-color: #007bff; 
+    color: #fff;
+    padding: 10px 20px;
+    margin-top: 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.signup-section-left button:hover {
+    background-color: #0056b3;
+}
+
+.signup-section-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.signup-section-right h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.form-field {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 15px;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff; 
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3; 
+}

@@ -73,7 +73,7 @@ export const addRelationship = async (req, res) => {
   };
   
 
-// Remove an existing follow relationship
+
 export const deleteRelationship = async (req, res) => {
   const { followerUserId, followedUserId } = req.body;
   const followerId = parseInt(followerUserId, 10);

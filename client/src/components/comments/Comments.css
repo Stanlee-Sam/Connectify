@@ -1,0 +1,71 @@
+.comment-section-write {
+    display: flex;
+    margin: 20px 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.comment-section-input {
+    flex: 5;
+    border: 1px solid #ccc; 
+    background-color: transparent;
+    color: #5271ff; 
+    padding: 10px;
+}
+
+.comment-section-button {
+    background-color: #5271ff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+}
+
+.comment-section-button:hover {
+    background-color: #4059d1; 
+}
+
+.comment-section-comment {
+    display: flex;
+    margin: 30px 0;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.comment-section-comment img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.comment-section-info {
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    align-items: flex-start;
+}
+
+.comment-section-info span {
+    font-weight: 500;
+}
+
+.comment-section-info p {
+    color: #5271ff; 
+}
+
+.comment-section-date {
+    flex: 1;
+    align-self: center;
+}
+
+.comment-section-no-comments {
+    text-align: center;
+    color: #666;
+}

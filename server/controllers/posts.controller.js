@@ -32,57 +32,53 @@ export const createPost = async (req, res) => {
 
   
 
-  export const getFeedPosts = async (req, res) => {
-    try {
-      const userId = req.user.id;
 
-      console.log("User ID:", userId);
-  
-      
-      const followingRelationships = await prisma.relationship.findMany({
-        where: { followerUserId: userId },
-        select: { followedUserId: true }
-      });
+export const getFeedPosts = async (req, res) => {
+  try {
+    const posts = await prisma.post.findMany({
+      include: { user: true },  
+      orderBy: { createdAt: 'desc' }  
+    });
 
-      console.log("Following Relationships:", followingRelationships);
-  
-      const followingIds = followingRelationships.map(rel => rel.followedUserId);
-      console.log("Following IDs:", followingIds); 
-  
-      
-      const posts = await prisma.post.findMany({
-        where: {
-          OR: [
-            { userId: userId }, 
-            { userId: { in: followingIds } } 
-          ]
-        },
-        include: { user: true }, 
-        orderBy: {
-          createdAt: 'desc' 
-        }
-      });
-  
-      console.log("Posts:", posts); 
-      res.status(200).json(posts);
-    } catch (e) {
-      console.error(e);
-      res.status(500).json({ message: e.message });
-    }
-  };
-  
-  
+    console.log("Posts:", posts);
+    res.status(200).json(posts);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: e.message });
+  }
+};
 
   export const getUserPosts = async (req, res) => {
     try {
       const { userId } = req.params;
-      const posts = await prisma.post.findMany({ where: { userId: parseInt(userId, 10) } });
+  
+      if (!userId) {
+        return res.status(400).json({ message: "User ID is required" });
+      }
+  
+      
+      const parsedUserId = parseInt(userId, 10);
+  
+      if (isNaN(parsedUserId)) {
+        return res.status(400).json({ message: "Invalid User ID" });
+      }
+  
+     
+      const posts = await prisma.post.findMany({
+        where: { userId: parsedUserId },
+        include: { user: true },
+        orderBy: { createdAt: 'desc' }
+      });
+  
+  
       res.status(200).json(posts);
     } catch (e) {
       console.error(e);
       res.status(500).json({ message: e.message });
     }
   };
+  
+  
 // export const likePost = async(req,res) => {
 //     try{
 //         const { id} = req.params

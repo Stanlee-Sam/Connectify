@@ -65,6 +65,7 @@
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    // width: 100%;
 
 
     button{
@@ -79,7 +80,9 @@
 
     span{
         font-weight: 500;
-        font-size: 30px;
+        font-size: 20px;
+        padding: 10px;
+        
     }
 
     .info{
@@ -91,7 +94,6 @@
 
         .item{
             display: flex;
-
             align-items: center;
             color: themed(textColorsoft);
 
@@ -110,6 +112,11 @@
     align-items: center;
     justify-content: flex-end;
     gap: 10px;
+  }
+  .user-profile-buttons {
+    display: flex;
+    gap: 10px;
+    // margin-top: 20px;
   }
 
 

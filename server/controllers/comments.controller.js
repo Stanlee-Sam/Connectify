@@ -41,37 +41,41 @@ export const getComment = async (req, res) => {
 
 
 export const addComment = async (req, res) => {
-    try {
+  try {
+    console.log("Incoming request body:", req.body); 
+    const { userId, desc, postId } = req.body;
 
-        console.log("Incoming request body:", req.body); 
-      const { userId, desc, postId } = req.body;
-  
-      if (!userId || !desc || !postId) {
-        return res.status(400).json({ message: "Missing required fields" });
-      }
-  
-      const userExists = await prisma.user.findUnique({ where: { id: userId } });
-      const postExists = await prisma.post.findUnique({ where: { id: postId } });
-  
-      if (!userExists) {
-        return res.status(404).json({ message: "User not found" });
-      }
-      if (!postExists) {
-        return res.status(404).json({ message: "Post not found" });
-      }
-  
-      const newComment = await prisma.comment.create({
-        data: {
-          userId,
-          desc,
-          postId,
-          createdAt: new Date()
-        },
-      });
-  
-      res.status(201).json(newComment);
-    } catch (e) {
-      console.error("Error adding comment:", e);
-      res.status(500).json({ message: "Server Error" });
+    if (!userId || !desc || !postId) {
+      return res.status(400).json({ message: "Missing required fields" });
     }
-  };
+
+    const parsedPostId = parseInt(postId, 10);
+    if (isNaN(parsedPostId)) {
+      return res.status(400).json({ message: "Invalid Post ID" });
+    }
+
+    const userExists = await prisma.user.findUnique({ where: { id: userId } });
+    const postExists = await prisma.post.findUnique({ where: { id: parsedPostId } });
+
+    if (!userExists) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (!postExists) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const newComment = await prisma.comment.create({
+      data: {
+        userId,
+        desc,
+        postId: parsedPostId,
+        createdAt: new Date()
+      },
+    });
+
+    res.status(201).json(newComment);
+  } catch (e) {
+    console.error("Error adding comment:", e);
+    res.status(500).json({ message: "Server Error" });
+  }
+};

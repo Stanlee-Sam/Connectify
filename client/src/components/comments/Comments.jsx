@@ -1,18 +1,18 @@
 import { useContext, useState } from "react";
 import PropTypes from "prop-types";
-import "./Comments.scss";
 import { AuthContext } from "../../context/authContext";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import moment from "moment";
+import './Comments.css'
 
 const Comments = ({ postId }) => {
-  const { currentUser } = useContext(AuthContext); 
+  const { currentUser } = useContext(AuthContext);
   const [newComment, setNewComment] = useState("");
 
   const queryClient = useQueryClient();
 
-  const { isLoading, error, data } = useQuery({
+  const { isLoading, data } = useQuery({
     queryKey: ["comments", postId],
     queryFn: async () => {
       const response = await makeRequest.get(`/comments/${postId}`);
@@ -24,7 +24,7 @@ const Comments = ({ postId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Current User:", currentUser); 
+    console.log("Current User:", currentUser);
 
     if (newComment.trim()) {
       const userId = currentUser?.id;
@@ -37,7 +37,7 @@ const Comments = ({ postId }) => {
       try {
         const payload = {
           desc: newComment,
-          userId: userId, 
+          userId: userId,
           postId: postId,
         };
 
@@ -57,30 +57,34 @@ const Comments = ({ postId }) => {
   };
 
   if (isLoading) return <p>Loading comments...</p>;
-  if (error) return <p>Error loading comments</p>;
+
+  
+  const comments = data || [];
+  
 
   return (
     <section className="comment-section">
-      <div className="write">
+      <div className="comment-section-write">
         <img src={currentUser?.profilePic || "/default-profile-pic.png"} alt="" />
         <input
+          className="comment-section-input"
           placeholder="Write a comment..."
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
         />
-        <button onClick={handleSubmit}>Post</button>
+        <button className="comment-section-button" onClick={handleSubmit}>Post</button>
       </div>
-      {data.length === 0 ? (
-        <p>No comments yet. Be the first to comment!</p>
+      {comments.length === 0 ? (
+        <p className="comment-section-no-comments">No comments yet. Be the first to comment!</p>
       ) : (
-        data.map((comment) => (
-          <div key={comment.id} className="comment">
+        comments.map((comment) => (
+          <div key={comment.id} className="comment-section-comment">
             <img src={comment.profilePic || "/default-profile-pic.png"} alt={comment.name} />
-            <div className="info">
-              <span>{comment.name}</span>
-              <p>{comment.desc}</p>
+            <div className="comment-section-info">
+              <span className="comment-section-name">{comment.name}</span>
+              <p className="comment-section-desc">{comment.desc}</p>
             </div>
-            <span className="date">{moment(comment.createdAt).fromNow()}</span>
+            <span className="comment-section-date">{moment(comment.createdAt).fromNow()}</span>
           </div>
         ))
       )}

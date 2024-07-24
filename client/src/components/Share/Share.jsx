@@ -39,8 +39,7 @@ const Share = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-  
-    
+
     const postData = {
       userId: currentUser?.id, 
       desc,
@@ -48,15 +47,15 @@ const Share = () => {
       name: currentUser?.name || '', 
       profilePic: currentUser?.profilePic || '' 
     };
-  
+
     console.log("Posting data:", postData);
-  
+
     if (!postData.userId || !postData.desc || !postData.name) {
       setError("Missing required fields");
       setIsSubmitting(false);
       return;
     }
-  
+
     try {
       await makeRequest.post("/posts", postData);
       setDesc("");
@@ -68,31 +67,32 @@ const Share = () => {
       setIsSubmitting(false);
     }
   };
-  
-  
+  const profilePicUrl = currentUser?.profilePic 
+    ? `/assets/${currentUser.profilePic}` 
+    : '/defaultProfilePic.jpg';
 
   return (
     <div className="share">
-      <div className="container">
-        <div className="top">
-          <div className="left">
-            <img src={"/upload/" + currentUser.profilePic} alt="" />
-            <input
+      <div className="share-container">
+        <div className="share-top">
+          <div className="share-left">
+          <img className="profile-image" src={profilePicUrl} alt="" />
+          <input
               type="text"
               placeholder={`What's on your mind ${currentUser.name}?`}
               onChange={(e) => setDesc(e.target.value)}
               value={desc}
             />
           </div>
-          <div className="right">
+          <div className="share-right">
             {file && (
-              <img className="file" alt="" src={URL.createObjectURL(file)} />
+              <img className="share-file" alt="" src={URL.createObjectURL(file)} />
             )}
           </div>
         </div>
         <hr />
-        <div className="bottom">
-          <div className="left">
+        <div className="share-bottom">
+          <div className="share-left">
             <input
               type="file"
               id="file"
@@ -100,27 +100,27 @@ const Share = () => {
               onChange={(e) => setFile(e.target.files[0])}
             />
             <label htmlFor="file">
-              <div className="item">
+              <div className="share-item">
                 <img src={Image} alt="" />
                 <span>Add Image</span>
               </div>
             </label>
-            <div className="item">
+            <div className="share-item">
               <img src={Map} alt="" />
               <span>Add Place</span>
             </div>
-            <div className="item">
+            <div className="share-item">
               <img src={Friend} alt="" />
               <span>Tag Friends</span>
             </div>
           </div>
-          <div className="right">
+          <div className="share-right">
             <button onClick={handleClick} disabled={isSubmitting}>
               Share
             </button>
           </div>
         </div>
-        {error && <div className="error">Error: {error.message}</div>}
+        {error && <div className="share-error">Error: {error.message}</div>}
       </div>
     </div>
   );

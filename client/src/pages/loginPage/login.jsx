@@ -1,47 +1,29 @@
-import { useState, useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { AuthContext } from '../../context/authContext.jsx';
 import { Link, useNavigate } from 'react-router-dom';
-const LoginPage = () => {
-    const [inputs, setInputs] = useState({
-        email: '',
-        password: '',
-    });
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import './login.css'; 
 
+const LoginPage = () => {
     const { login, currentUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const handleChange = (e) => {
-        setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }));
-    };
-
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        setLoading(true); 
-        setError(null); 
-
-        try {
-            await login(inputs);
-            console.log("Login successful, user:", currentUser)
-           
-        } catch (error) {
-            setError(error.response?.data?.message || "Login failed");
-        } finally {
-            setLoading(false); 
-        }
-    };
-
     useEffect(() => {
         if (currentUser) {
-          navigate("/");
+            navigate("/");
         }
-      }, [currentUser, navigate]);
+    }, [currentUser, navigate]);
+
+    const validationSchema = Yup.object({
+        email: Yup.string().email('Invalid email address').required('Required'),
+        password: Yup.string().min(6, 'Password must be at least 6 characters').required('Required')
+    });
 
     return (
         <section className="login-section">
             <div className="card">
-                <div className="left">
+                <div className="login-section-left">
                     <h1>Hello there!</h1>
                     <p>
                         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Totam velit quidem commodi atque nemo minus alias tempora doloremque voluptate sint mollitia repellat, harum iure amet, suscipit dolore eum. Expedita, quod!
@@ -51,30 +33,44 @@ const LoginPage = () => {
                         <button>Register</button>
                     </Link>
                 </div>
-                <div className="right">
+                <div className="login-section-right">
                     <h1>Login</h1>
-                    <form onSubmit={handleLogin}>
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            name="email"
-                            value={inputs.email}
-                            onChange={handleChange}
-                            required
-                        />
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            name="password"
-                            value={inputs.password}
-                            onChange={handleChange}
-                            required
-                        />
-                        {error && <div className="error-message">{error}</div>}
-                        <button type="submit" disabled={loading}>
-                            {loading ? 'Logging in...' : 'Login'}
-                        </button>
-                    </form>
+                    <Formik
+                        initialValues={{ email: '', password: '' }}
+                        validationSchema={validationSchema}
+                        onSubmit={async (values, { setSubmitting, setErrors }) => {
+                            try {
+                                await login(values);
+                                console.log("Login successful");
+                            } catch (error) {
+                                setErrors({ email: 'Login failed' }); 
+                            } finally {
+                                setSubmitting(false);
+                            }
+                        }}
+                    >
+                        {({ isSubmitting }) => (
+                            <Form>
+                                <Field
+                                    type="email"
+                                    name="email"
+                                    placeholder="Email"
+                                    className="form-field"
+                                />
+                                <ErrorMessage name="email" component="div" className="error-message" />
+                                <Field
+                                    type="password"
+                                    name="password"
+                                    placeholder="Password"
+                                    className="form-field"
+                                />
+                                <ErrorMessage name="password" component="div" className="error-message" />
+                                <button type="submit" disabled={isSubmitting}>
+                                    {isSubmitting ? 'Logging in...' : 'Login'}
+                                </button>
+                            </Form>
+                        )}
+                    </Formik>
                 </div>
             </div>
         </section>

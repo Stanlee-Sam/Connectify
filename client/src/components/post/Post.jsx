@@ -19,6 +19,7 @@ const Post = ({post}) => {
    
     console.log('Image URL:', imageUrl);
 
+    
     return (
         <section className="post-section">
             <div className="container">
@@ -61,9 +62,9 @@ const Post = ({post}) => {
 Post.propTypes = {
     post: PropTypes.shape({
       id: PropTypes.string.isRequired,
-      userId: PropTypes.string.isRequired,
+      userId: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-      profilePic: PropTypes.string.isRequired,
+      profilePic: PropTypes.string,
       desc: PropTypes.string.isRequired,
       img: PropTypes.string,
       createdAt: PropTypes.instanceOf(Date).isRequired,

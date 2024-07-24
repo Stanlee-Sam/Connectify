@@ -1,6 +1,4 @@
-
-
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const getAllUsers = async (req, res) => {
@@ -10,16 +8,16 @@ export const getAllUsers = async (req, res) => {
   } catch (e) {
     res.status(500).json({ message: e.message });
   }
-}
+};
 
 export const getUser = async (req, res) => {
   try {
-    const userId = req.user.id; 
+    const userId = parseInt(req.params.userId, 10); 
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (user) {
       res.status(200).json(user);
     } else {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: "User not found" });
     }
   } catch (e) {
     res.status(500).json({ message: e.message });
@@ -28,23 +26,25 @@ export const getUser = async (req, res) => {
 
 export const getUserFriends = async (req, res) => {
   try {
-    const userId = req.user.id; 
+    const userId = req.user.id;
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (user) {
       const friends = await Promise.all(
         user.friends.map((id) => prisma.user.findUnique({ where: { id } }))
       );
-      const formattedFriends = friends.map(({ id, firstName, lastName, occupation, location, picturePath }) => ({
-        id,
-        firstName,
-        lastName,
-        occupation,
-        location,
-        picturePath,
-      }));
+      const formattedFriends = friends.map(
+        ({ id, firstName, lastName, occupation, location, picturePath }) => ({
+          id,
+          firstName,
+          lastName,
+          occupation,
+          location,
+          picturePath,
+        })
+      );
       res.status(200).json({ formattedFriends });
     } else {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: "User not found" });
     }
   } catch (e) {
     res.status(500).json({ message: e.message });
@@ -66,26 +66,59 @@ export const addRemoveFriend = async (req, res) => {
         user.friends.push(friendId);
         friend.friends.push(userId);
       }
-      await prisma.user.update({ where: { id: userId }, data: { friends: user.friends } });
-      await prisma.user.update({ where: { id: friendId }, data: { friends: friend.friends } });
+      await prisma.user.update({
+        where: { id: userId },
+        data: { friends: user.friends },
+      });
+      await prisma.user.update({
+        where: { id: friendId },
+        data: { friends: friend.friends },
+      });
 
       const updatedFriends = await Promise.all(
         user.friends.map((id) => prisma.user.findUnique({ where: { id } }))
       );
-      const formattedFriends = updatedFriends.map(({ id, firstName, lastName, occupation, location, picturePath }) => ({
-        id,
-        firstName,
-        lastName,
-        occupation,
-        location,
-        picturePath,
-      }));
+      const formattedFriends = updatedFriends.map(
+        ({ id, firstName, lastName, occupation, location, picturePath }) => ({
+          id,
+          firstName,
+          lastName,
+          occupation,
+          location,
+          picturePath,
+        })
+      );
 
       res.status(200).json({ formattedFriends });
     } else {
-      res.status(404).json({ message: 'User or friend not found' });
+      res.status(404).json({ message: "User or friend not found" });
     }
   } catch (e) {
     res.status(500).json({ message: e.message });
   }
 };
+
+export const updateUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { coverPic, profilePic, name, city, website } = req.body;
+
+ 
+    const updatedUser = await prisma.user.update({
+      where: { id: parseInt(userId, 10) },
+      data: {
+        coverPic,
+        profilePic,
+        name,
+        city,
+        website,
+      },
+    });
+
+    res.status(200).json(updatedUser);
+  } catch (e) {
+    console.error("Error updating user:", e.message);
+    res.status(500).json({ message: e.message });
+  }
+};
+
