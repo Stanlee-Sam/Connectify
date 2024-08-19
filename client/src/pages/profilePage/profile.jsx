@@ -14,7 +14,6 @@ import {
   Pinterest,
   X,
   Place,
-  Language,
   EmailOutlined,
   MoreVert,
 } from "@mui/icons-material";
@@ -128,10 +127,10 @@ const ProfilePage = () => {
                 <Place />
                 <span>{data.city}</span>
               </div>
-              <div className="item">
+              {/* <div className="item">
                 <Language />
                 <span>{data.website}</span>
-              </div>
+              </div> */}
             </div>
             {userId === currentUser.id ? (
               <>

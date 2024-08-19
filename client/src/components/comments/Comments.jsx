@@ -60,6 +60,9 @@ const Comments = ({ postId }) => {
 
   
   const comments = data || [];
+  const profilePicUrl = currentUser?.profilePic 
+  ? `/assets/${currentUser.profilePic}` 
+  : '/defaultProfilePic.jpg';
   
 
   return (
@@ -79,8 +82,8 @@ const Comments = ({ postId }) => {
       ) : (
         comments.map((comment) => (
           <div key={comment.id} className="comment-section-comment">
-            <img src={comment.profilePic || "/default-profile-pic.png"} alt={comment.name} />
-            <div className="comment-section-info">
+              <img className="profile-image" src={profilePicUrl} alt="" />
+              <div className="comment-section-info">
               <span className="comment-section-name">{comment.name}</span>
               <p className="comment-section-desc">{comment.desc}</p>
             </div>

@@ -11,23 +11,23 @@ const Stories = () => {
   const stories = [
     {
       id: 1,
-      name: "Jay Gerrick",
-      img: "../../src/assets/20210828_234819.jpg",
+      name: "Will J",
+      img: "../../src/assets/★.jpeg",
     },
     {
       id: 2,
-      name: "Jay Gerrick",
-      img: "../../src/assets/WhatsApp Image 2023-02-24 at 22.49.24.jpg",
+      name: "Symere Woods",
+      img: "../../src/assets/Symere.jpeg",
     },
     {
       id: 3,
       name: "Jay Gerrick",
-      img: "../../src/assets/WhatsApp Image 2023-02-24 at 22.49.24.jpg",
+      img: "../../src/assets/Positive.jpeg",
     },
     {
       id: 4,
-      name: "Jay Gerrick",
-      img: "../../src/assets/WhatsApp Image 2023-02-24 at 22.49.24.jpg",
+      name: "Carl Johnson",
+      img: "../../src/assets/Game.jpeg",
     },
     
     

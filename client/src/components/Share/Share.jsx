@@ -1,7 +1,7 @@
 import "./Share.scss";
 import Image from "../../assets/img.png";
-import Map from "../../assets/map.png";
-import Friend from "../../assets/friend.png";
+// import Map from "../../assets/map.png";
+// import Friend from "../../assets/friend.png";
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../context/authContext";
 import { makeRequest } from "../../axios";
@@ -105,14 +105,14 @@ const Share = () => {
                 <span>Add Image</span>
               </div>
             </label>
-            <div className="share-item">
+            {/* <div className="share-item">
               <img src={Map} alt="" />
               <span>Add Place</span>
             </div>
             <div className="share-item">
               <img src={Friend} alt="" />
               <span>Tag Friends</span>
-            </div>
+            </div> */}
           </div>
           <div className="share-right">
             <button onClick={handleClick} disabled={isSubmitting}>
