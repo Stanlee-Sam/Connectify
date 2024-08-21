@@ -27,18 +27,20 @@ const Post = ({ post }) => {
     onError: (err) => console.error("Fetch error:", err),
   });
 
-  const {data:commentsData} = useQuery({
+  const { data: commentsData } = useQuery({
     queryKey: ["comments", post.id],
     queryFn: async () => {
       const response = await makeRequest.get(`/comments/${post.id}`);
       return response.data;
     },
     onError: (err) => console.error("Fetch error:", err),
-  })
+  });
 
   const likeMutation = useMutation({
     mutationFn: async () => {
-      return await makeRequest.post(`/like/${post.id}/like`, { userId: currentUser.id });
+      return await makeRequest.post(`/like/${post.id}/like`, {
+        userId: currentUser.id,
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["likes", post.id]);
@@ -85,6 +87,10 @@ const Post = ({ post }) => {
 
   console.log("Image URL:", imageUrl);
 
+  const profilePicUrl = post.profilePic 
+  ? `/assets/${post.profilePic}` 
+  : '/public/Profile.jpeg';
+
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error loading likes</p>;
 
@@ -93,7 +99,7 @@ const Post = ({ post }) => {
       <div className="container">
         <div className="user">
           <div className="userInfo">
-            <img src={post.profilePic} alt="" />
+            <img src={profilePicUrl} alt="" />
             <div className="details">
               <Link
                 to={`/profile/${post.userId}`}

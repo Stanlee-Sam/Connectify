@@ -14,7 +14,7 @@ const LeftBar = () => {
   // Fallback URL for profile picture if currentUser.profilePic is null
   const profilePicUrl = currentUser?.profilePic 
     ? `/assets/${currentUser.profilePic}` 
-    : '/defaultProfilePic.jpg';
+    : '/public/Profile.jpeg';
 
   return (
     <section className="leftbar-section">

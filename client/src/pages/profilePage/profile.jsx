@@ -52,7 +52,7 @@ const ProfilePage = () => {
   }, [relationshipData, currentUser.id]);
 
   const handleLogout = () => {
-    logout(); 
+    logout();
   };
 
   const handleFollow = async () => {
@@ -90,16 +90,21 @@ const ProfilePage = () => {
   if (error || !data) {
     return <div>Error loading profile</div>;
   }
+  const DefaultCoverPic = "/public/Logo.png";
+  const DefaultProfilePic = "/public/Profile.jpeg";
 
+  const coverPicUrl = data.coverPic
+    ? `/assets/${data.coverPic}`
+    : DefaultCoverPic;
+
+  const profilePicUrl = data.profilePic
+    ? `/assets/${data.profilePic}`
+    : DefaultProfilePic;
   return (
     <section className="profile-section">
       <div className="images">
-        <img className="cover" src={`/assets/${data.coverPic}`} alt="Cover" />
-        <img
-          className="profile-image"
-          src={`/assets/${data.profilePic}`}
-          alt="Profile"
-        />
+        <img className="cover" src={coverPicUrl} alt="Cover" />
+        <img className="profile-image" src={profilePicUrl} alt="Profile" />
       </div>
       <div className="profile-container">
         <div className="uInfo">

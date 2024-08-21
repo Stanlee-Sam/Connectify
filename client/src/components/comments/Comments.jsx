@@ -62,13 +62,13 @@ const Comments = ({ postId }) => {
   const comments = data || [];
   const profilePicUrl = currentUser?.profilePic 
   ? `/assets/${currentUser.profilePic}` 
-  : '/defaultProfilePic.jpg';
+  : '/public/Profile.jpeg';
   
 
   return (
     <section className="comment-section">
       <div className="comment-section-write">
-        <img src={currentUser?.profilePic || "/default-profile-pic.png"} alt="" />
+        <img src={currentUser?.profilePic || "/Profile.jpeg"} alt="" />
         <input
           className="comment-section-input"
           placeholder="Write a comment..."
