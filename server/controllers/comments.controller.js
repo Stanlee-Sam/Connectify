@@ -79,3 +79,39 @@ export const addComment = async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 };
+
+export const deleteComment = async (req, res) => {
+  const { commentId } = req.params;
+  const { userId } = req.body;
+
+  try {
+    const parsedCommentId = parseInt(commentId, 10);
+    const parsedUserId = parseInt(userId, 10);
+
+    if(isNaN(parsedCommentId) || isNaN(parsedUserId)){
+      return res.status(400).json({ message: "Invalid comment ID or user ID" });
+    }
+
+    const existingComment = await prisma.comment.findFirst({
+      where: {
+        id: parsedCommentId, 
+        userId: parsedUserId 
+      },
+    });
+
+    if (!existingComment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+
+    await prisma.comment.delete({
+      where: {
+        id: parsedCommentId,
+      },
+    });
+
+    res.status(200).json({ message: "Comment deleted successfully" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Server Error" });
+  }
+};

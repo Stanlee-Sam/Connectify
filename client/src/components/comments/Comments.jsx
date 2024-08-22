@@ -1,14 +1,15 @@
 import { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import { AuthContext } from "../../context/authContext";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import moment from "moment";
-import './Comments.css'
+import "./Comments.css";
 
 const Comments = ({ postId }) => {
   const { currentUser } = useContext(AuthContext);
   const [newComment, setNewComment] = useState("");
+  const [menuOpen, setMenuOpen] = useState(null);
 
   const queryClient = useQueryClient();
 
@@ -30,7 +31,7 @@ const Comments = ({ postId }) => {
       const userId = currentUser?.id;
 
       if (!userId) {
-        console.error('User ID is undefined');
+        console.error("User ID is undefined");
         return;
       }
 
@@ -41,55 +42,99 @@ const Comments = ({ postId }) => {
           postId: postId,
         };
 
-        console.log('Posting comment with payload:', payload);
+        console.log("Posting comment with payload:", payload);
 
-        const response = await makeRequest.post('/comments', payload);
-        console.log('Comment posted successfully:', response.data);
+        const response = await makeRequest.post("/comments", payload);
+        console.log("Comment posted successfully:", response.data);
 
-        setNewComment('');
-        queryClient.invalidateQueries(['comments', postId]);
+        setNewComment("");
+        queryClient.invalidateQueries(["comments", postId]);
       } catch (err) {
-        console.error('Error adding comment:', err.response ? err.response.data : err.message);
+        console.error(
+          "Error adding comment:",
+          err.response ? err.response.data : err.message
+        );
       }
     } else {
-      console.warn('Comment cannot be empty');
+      console.warn("Comment cannot be empty");
     }
+  };
+  const deleteCommentMutation = useMutation({
+    mutationFn: async (commentId) => {
+      await makeRequest.delete(`/comments/${commentId}`, {
+        data: { userId: currentUser.id },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["comments", postId]);
+    },
+    onError: (err) => console.error("Error deleting comment:", err),
+  });
+
+  const deleteComment = async (commentId) => {
+    console.log("Deleting comment with ID:", commentId);
+    deleteCommentMutation.mutate(commentId);
   };
 
   if (isLoading) return <p>Loading comments...</p>;
 
-  
   const comments = data || [];
-  const profilePicUrl = currentUser?.profilePic 
-  ? `/assets/${currentUser.profilePic}` 
-  : '/public/Profile.jpeg';
   
-
   return (
     <section className="comment-section">
       <div className="comment-section-write">
-        <img src={currentUser?.profilePic || "/Profile.jpeg"} alt="" />
+        <img src={currentUser?.profilePic ? `/assets/${currentUser.profilePic}` : '/public/Profile.jpeg'} alt="" />
         <input
           className="comment-section-input"
           placeholder="Write a comment..."
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
         />
-        <button className="comment-section-button" onClick={handleSubmit}>Post</button>
+        <button className="comment-section-button" onClick={handleSubmit}>
+          Post
+        </button>
       </div>
       {comments.length === 0 ? (
-        <p className="comment-section-no-comments">No comments yet. Be the first to comment!</p>
+        <p className="comment-section-no-comments">
+          No comments yet. Be the first to comment!
+        </p>
       ) : (
-        comments.map((comment) => (
-          <div key={comment.id} className="comment-section-comment">
-              <img className="profile-image" src={profilePicUrl} alt="" />
-              <div className="comment-section-info">
-              <span className="comment-section-name">{comment.name}</span>
-              <p className="comment-section-desc">{comment.desc}</p>
-            </div>
-            <span className="comment-section-date">{moment(comment.createdAt).fromNow()}</span>
-          </div>
-        ))
+        comments.map((comment) => {
+          const authorProfilePicUrl = comment.user?.profilePic 
+            ? `/assets/${comment.user.profilePic}` 
+            : '/public/Profile.jpeg';
+
+            return (
+              
+                <div key={comment.id} className="comment-section-comment">
+                  <img className="profile-image" src={authorProfilePicUrl} alt="" />
+                  <div className="comment-section-info">
+                    <span className="comment-section-name">{comment.name}</span>
+                    <p
+                      className="comment-section-desc"
+                      onClick={() =>
+                        setMenuOpen(menuOpen === comment.id ? null : comment.id)
+                      }
+                    >
+                      {comment.desc}
+                    </p>
+                    {menuOpen === comment.id && comment.userId === currentUser.id && (
+                      <button
+                        className="deleteBtn"
+                        onClick={() => deleteComment(comment.id)}
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </div>
+                  <span className="comment-section-date">
+                    {moment(comment.createdAt).fromNow()}
+                  </span>
+                </div>
+              
+            )
+
+          }) 
       )}
     </section>
   );

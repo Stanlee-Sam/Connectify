@@ -35,7 +35,13 @@
     align-items: center;
     gap: 20px;
 }
-
+.comment-section .comment-section-write img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
 .comment-section-comment img {
     width: 40px;
     height: 40px;
@@ -50,6 +56,7 @@
     flex-direction: column;
     gap: 3px;
     align-items: flex-start;
+    position: relative;
 }
 
 .comment-section-info span {
@@ -68,4 +75,17 @@
 .comment-section-no-comments {
     text-align: center;
     color: #666;
+}
+.comment-section-comment .comment-section-info .deleteBtn {
+    position: absolute;
+    /* top: 30px; */
+    right: 0;
+    background: red;
+    border: none;
+    color: white;
+    padding: 3px;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease;
 }
