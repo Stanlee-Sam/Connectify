@@ -25,6 +25,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
     
 
 }
@@ -76,5 +77,21 @@
     align-items: center;
     gap: 10px;
     font-size: 12px
+}
+
+.post-section .container .user .deleteBtn{
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background: red;
+    border: none;
+    color: white;
+    padding: 3px;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+
+
 }
 }

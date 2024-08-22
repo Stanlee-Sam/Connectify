@@ -14,6 +14,8 @@ import { AuthContext } from "../../context/authContext";
 
 const Post = ({ post }) => {
   const [commentOpen, setCommentOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  
   const { currentUser } = useContext(AuthContext);
   const queryClient = useQueryClient();
 
@@ -61,6 +63,17 @@ const Post = ({ post }) => {
     },
     onError: (err) => console.error("Error disliking post:", err),
   });
+const deletePostMutation = useMutation({
+    mutationFn: async () => {
+      await makeRequest.delete(`/posts/${post.id}/delete`, {
+        data: { userId: currentUser.id },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["posts", post.id]);
+    },
+    onError: (err) => console.error("Error deleting post:", err),
+  });
 
   const handleLike = async () => {
     console.log("Liking post with ID:", post.id);
@@ -78,6 +91,11 @@ const Post = ({ post }) => {
   const handleDislike = async () => {
     dislikeMutation.mutate();
   };
+
+  const deletePost = async () => {
+    console.log("Deleting post with ID:", post.id);
+    deletePostMutation.mutate();
+  }
 
   const hasLiked = data?.some((like) => like.userId === currentUser.id);
   const likesCount = data?.length || 0;
@@ -110,7 +128,8 @@ const Post = ({ post }) => {
               <span className="date">{moment(post.createdAt).fromNow()}</span>
             </div>
           </div>
-          <MoreHoriz />
+          <MoreHoriz onClick = {()=>setMenuOpen(!menuOpen)}/>
+            {menuOpen && post.userId === currentUser.id && (<button className= "deleteBtn" onClick={deletePost}>Delete</button>)}
         </div>
         <div className="content">
           <p>{post.desc}</p>
