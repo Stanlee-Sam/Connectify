@@ -67,6 +67,11 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
   res.status(200).json(file.filename);
 });
 
+app.get("/", (req, res) => {
+  res.send("Connectify backend is running successfully!");
+});
+
+
 // Signup
 app.post("/api/auth/signup", signup);
 //post route
