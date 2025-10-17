@@ -30,7 +30,7 @@ app.use(
       "http://localhost:5173",
       "http://localhost:5174",
       "http://localhost:5175",
-      'https://connectify-teal-psi.vercel.app/'
+      'https://connectify-teal-psi.vercel.app'
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
