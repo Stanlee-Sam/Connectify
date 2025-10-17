@@ -14,7 +14,7 @@ import usersRoute from "./routes/users.routes.js";
 import postRoute from "./routes/posts.routes.js";
 import likeRoute from "./routes/likes.routes.js";
 import commentRoute from "./routes/comments.routes.js";
-import  relationshipRoute from "./routes/relationships.routes.js";
+import relationshipRoute from "./routes/relationships.routes.js";
 import { verifyToken } from "./middleware/auth.middleware.js";
 
 import cookieParser from "cookie-parser";
@@ -30,7 +30,7 @@ app.use(
       "http://localhost:5173",
       "http://localhost:5174",
       "http://localhost:5175",
-      'https://connectify-teal-psi.vercel.app'
+      "https://connectify-87jf6v1bh-stanley-amunzes-projects.vercel.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
@@ -54,7 +54,6 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 // Multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    
     cb(null, path.join(__dirname, "../client/public/assets"));
   },
   filename: function (req, file, cb) {
@@ -72,7 +71,6 @@ app.get("/", (req, res) => {
   res.send("Connectify backend is running successfully!");
 });
 
-
 // Signup
 app.post("/api/auth/signup", signup);
 //post route
@@ -88,13 +86,12 @@ app.use("/api/posts", postRoute);
 app.use("/api/like", likeRoute);
 //comments
 app.use("/api/comments", commentRoute);
-//relationships 
+//relationships
 app.use("/api/relationships", relationshipRoute);
 
 app.get("/test", (req, res) => {
   res.status(200).send("Hey");
 });
-
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
