@@ -22,7 +22,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const login = async (inputs) => {
     try {
-      const res = await axios.post('http://localhost:8000/api/auth/login', inputs, {
+      const res = await axios.post('/api/auth/login', inputs, {
         withCredentials: true,
       });
 
@@ -33,7 +33,7 @@ export const AuthContextProvider = ({ children }) => {
         const decodedToken = jwtDecode(token);
       const userId = decodedToken.id;
 
-        const userRes = await axios.get(`http://localhost:8000/api/users/${userId}`, {
+        const userRes = await axios.get(`/api/users/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -55,7 +55,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post('http://localhost:8000/api/auth/logout', {}, {
+      await axios.post('/api/auth/logout', {}, {
         withCredentials: true,
       });
     } catch (error) {

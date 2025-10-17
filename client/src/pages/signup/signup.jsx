@@ -50,7 +50,7 @@ const Register = () => {
                         validationSchema={validationSchema}
                         onSubmit={async (values, { setSubmitting }) => {
                             try {
-                                await axios.post("http://localhost:8000/api/auth/signup", values);
+                                await axios.post("/api/auth/signup", values);
                                 
                                 navigate('/login');
                             } catch (err) {
