@@ -69,7 +69,7 @@ const Share = () => {
   };
   const profilePicUrl = currentUser?.profilePic 
     ? `/assets/${currentUser.profilePic}` 
-    : '/public/Profile.jpeg';
+    : '/assets/Profile.jpeg';
 
   return (
     <div className="share">

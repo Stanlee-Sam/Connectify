@@ -1,4 +1,5 @@
 import "./righbar.scss";
+import Jay from "../../../src/assets/20210828_234819.jpg"
 const RightBar = () => {
   return (
     <section className="rightbar-section">
@@ -7,7 +8,7 @@ const RightBar = () => {
           <span>Suggestions for you</span>
           <div className="user">
             <div className="userInfo">
-              <img src="../../../src/assets/20210828_234819.jpg" alt="" />
+              <img src={Jay} alt="" />
               <span>Jay Gerrick</span>
             </div>
             <div className="buttons">
@@ -17,7 +18,7 @@ const RightBar = () => {
           </div>
           <div className="user">
             <div className="userInfo">
-              <img src="../../../src/assets/20210828_234819.jpg" alt="" />
+              <img src={Jay} alt="" />
               <span>Jay Gerrick</span>
             </div>
             <div className="buttons">
@@ -30,7 +31,7 @@ const RightBar = () => {
             <span>Latest Activities</span>
             <div className="user">
             <div className="userInfo">
-              <img src="../../../src/assets/20210828_234819.jpg" alt="" />
+              <img src={Jay} alt="" />
               <p>
               <span>Jay Gerrick</span>
               posted a new photo of their home.
@@ -40,7 +41,7 @@ const RightBar = () => {
           </div>
           <div className="user">
             <div className="userInfo">
-              <img src="../../../src/assets/20210828_234819.jpg" alt="" />
+              <img src={Jay} alt="" />
               <p>
               <span>Jay Gerrick</span>
               posted a new photo of their home.
@@ -50,7 +51,7 @@ const RightBar = () => {
           </div>
           <div className="user">
             <div className="userInfo">
-              <img src="../../../src/assets/20210828_234819.jpg" alt="" />
+              <img src={Jay} alt="" />
               <p>
               <span>Jay Gerrick</span>
               posted a new photo of their home.
@@ -60,7 +61,7 @@ const RightBar = () => {
           </div>
           <div className="user">
             <div className="userInfo">
-              <img src="../../../src/assets/20210828_234819.jpg" alt="" />
+              <img src={Jay} alt="" />
               <p>
               <span>Jay Gerrick</span>
               changed their cover picture
@@ -70,7 +71,7 @@ const RightBar = () => {
           </div>
           <div className="user">
             <div className="userInfo">
-              <img src="../../../src/assets/20210828_234819.jpg" alt="" />
+              <img src={Jay} alt="" />
               <p>
               <span>Jay Gerrick </span> posted a new photo of their home.
               </p>
@@ -82,7 +83,7 @@ const RightBar = () => {
             <span>Online Friends</span>
             <div className="user">
             <div className="userInfo">
-              <img src="../../../src/assets/20210828_234819.jpg" alt="" />
+              <img src={Jay} alt="" />
               <div className="online"/>
               <span>Jay Gerrick </span> 
               
@@ -91,7 +92,7 @@ const RightBar = () => {
           </div>
           <div className="user">
             <div className="userInfo">
-              <img src="../../../src/assets/20210828_234819.jpg" alt="" />
+              <img src={Jay} alt="" />
               <div className="online"/>
               <span>Jay Gerrick </span> 
               
@@ -100,7 +101,7 @@ const RightBar = () => {
           </div>
           <div className="user">
             <div className="userInfo">
-              <img src="../../../src/assets/20210828_234819.jpg" alt="" />
+              <img src={Jay} alt="" />
               <div className="online"/>
               <span>Jay Gerrick </span> 
               
@@ -109,7 +110,7 @@ const RightBar = () => {
           </div>
           <div className="user">
             <div className="userInfo">
-              <img src="../../../src/assets/20210828_234819.jpg" alt="" />
+              <img src={Jay} alt="" />
               <div className="online"/>
               <span>Jay Gerrick </span> 
               

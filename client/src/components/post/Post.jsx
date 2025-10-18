@@ -107,7 +107,7 @@ const deletePostMutation = useMutation({
 
   const profilePicUrl = post.profilePic 
   ? `/assets/${post.profilePic}` 
-  : '/public/Profile.jpeg';
+    : '/assets/Profile.jpeg';
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error loading likes</p>;

@@ -90,8 +90,8 @@ const ProfilePage = () => {
   if (error || !data) {
     return <div>Error loading profile</div>;
   }
-  const DefaultCoverPic = "/public/Logo.png";
-  const DefaultProfilePic = "/public/Profile.jpeg";
+  const DefaultCoverPic = "/assets/Logo.png";
+  const DefaultProfilePic = '/assets/Profile.jpeg';
 
   const coverPicUrl = data.coverPic
     ? `/assets/${data.coverPic}`

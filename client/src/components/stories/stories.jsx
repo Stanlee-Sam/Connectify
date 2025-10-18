@@ -1,36 +1,37 @@
-// import { useContext } from "react";
 import "./strories.css";
-// import { AuthContext } from "../../context/authContext";
+import Will from "../../../src/assets/★.jpeg";
+import Symere from "../../../src/assets/Symere.jpeg";
+import Jay from "../../../src/assets/Positive.jpeg";
+import Carl from "../../../src/assets/Game.jpeg";
+import Profile from "../../../src/assets/WhatsApp Image 2023-02-24 at 22.49.24.jpg";
 
 const Stories = () => {
-    // const {currentUser} = useContext(AuthContext)
+  // const {currentUser} = useContext(AuthContext)
   const currentUser = {
     name: "Jay Gerrick",
-    profilePic: "../../src/assets/WhatsApp Image 2023-02-24 at 22.49.24.jpg",
+    profilePic: Profile,
   };
   const stories = [
     {
       id: 1,
       name: "Will J",
-      img: "../../src/assets/★.jpeg",
+      img: Will,
     },
     {
       id: 2,
       name: "Symere Woods",
-      img: "../../src/assets/Symere.jpeg",
+      img: Symere,
     },
     {
       id: 3,
       name: "Jay Gerrick",
-      img: "../../src/assets/Positive.jpeg",
+      img: Jay,
     },
     {
       id: 4,
       name: "Carl Johnson",
-      img: "../../src/assets/Game.jpeg",
+      img: Carl,
     },
-    
-    
   ];
   return (
     <section className="stories-section">

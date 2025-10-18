@@ -79,11 +79,18 @@ const Comments = ({ postId }) => {
   if (isLoading) return <p>Loading comments...</p>;
 
   const comments = data || [];
-  
+
   return (
     <section className="comment-section">
       <div className="comment-section-write">
-        <img src={currentUser?.profilePic ? `/assets/${currentUser.profilePic}` : '/public/Profile.jpeg'} alt="" />
+        <img
+          src={
+            currentUser?.profilePic
+              ? `/assets/${currentUser.profilePic}`
+              : "/public/Profile.jpeg"
+          }
+          alt=""
+        />
         <input
           className="comment-section-input"
           placeholder="Write a comment..."
@@ -100,41 +107,39 @@ const Comments = ({ postId }) => {
         </p>
       ) : (
         comments.map((comment) => {
-          const authorProfilePicUrl = comment.user?.profilePic 
-            ? `/assets/${comment.user.profilePic}` 
-            : '/public/Profile.jpeg';
+          const authorProfilePicUrl = comment.user?.profilePic
+            ? `/assets/${comment.user.profilePic}`
+            : "/assets/Profile.jpeg";
 
-            return (
-              
-                <div key={comment.id} className="comment-section-comment">
-                  <img className="profile-image" src={authorProfilePicUrl} alt="" />
-                  <div className="comment-section-info">
-                    <span className="comment-section-name">{comment.name}</span>
-                    <p
-                      className="comment-section-desc"
-                      onClick={() =>
-                        setMenuOpen(menuOpen === comment.id ? null : comment.id)
-                      }
+          return (
+            <div key={comment.id} className="comment-section-comment">
+              <img className="profile-image" src={authorProfilePicUrl} alt="" />
+              <div className="comment-section-info">
+                <span className="comment-section-name">{comment.name}</span>
+                <p
+                  className="comment-section-desc"
+                  onClick={() =>
+                    setMenuOpen(menuOpen === comment.id ? null : comment.id)
+                  }
+                >
+                  {comment.desc}
+                </p>
+                {menuOpen === comment.id &&
+                  comment.userId === currentUser.id && (
+                    <button
+                      className="deleteBtn"
+                      onClick={() => deleteComment(comment.id)}
                     >
-                      {comment.desc}
-                    </p>
-                    {menuOpen === comment.id && comment.userId === currentUser.id && (
-                      <button
-                        className="deleteBtn"
-                        onClick={() => deleteComment(comment.id)}
-                      >
-                        Delete
-                      </button>
-                    )}
-                  </div>
-                  <span className="comment-section-date">
-                    {moment(comment.createdAt).fromNow()}
-                  </span>
-                </div>
-              
-            )
-
-          }) 
+                      Delete
+                    </button>
+                  )}
+              </div>
+              <span className="comment-section-date">
+                {moment(comment.createdAt).fromNow()}
+              </span>
+            </div>
+          );
+        })
       )}
     </section>
   );
