@@ -31,6 +31,7 @@ app.use(
       "http://localhost:5174",
       "http://localhost:5175",
       "https://connectify-2988ko3kl-stanley-amunzes-projects.vercel.app",
+      'https://connectify-teal-psi.vercel.app/'
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
