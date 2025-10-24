@@ -11,6 +11,30 @@ export const AuthContextProvider = ({ children }) => {
     return storedUser && storedUser !== 'null' ? JSON.parse(storedUser) : null;
   });
 
+   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        const currentTime = Date.now() / 1000; 
+
+        if (decoded.exp < currentTime) {
+          
+          console.warn('Token expired, clearing user session');
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          setCurrentUser(null);
+        }
+      } catch (error) {
+        console.error('Error decoding token:', error);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setCurrentUser(null);
+      }
+    }
+  }, []); 
+
+
   useEffect(() => {
     console.log('Current user updated:', currentUser);
     if (currentUser) {
