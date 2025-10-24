@@ -19,7 +19,6 @@ export const AuthContextProvider = ({ children }) => {
         const currentTime = Date.now() / 1000; 
 
         if (decoded.exp < currentTime) {
-          
           console.warn('Token expired, clearing user session');
           localStorage.removeItem('token');
           localStorage.removeItem('user');
